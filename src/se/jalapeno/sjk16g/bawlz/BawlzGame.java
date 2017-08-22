@@ -1,14 +1,20 @@
 package se.jalapeno.sjk16g.bawlz;
 
-import java.awt.event.MouseEvent;
-import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import javax.swing.JFrame;
 
-public class BawlzGame extends JFrame implements MouseMotionListener {
+public class BawlzGame extends JFrame {
 	private static BawlzGame instance;
+	private PlayField playField;
+	private Player player;
+	private PlayerController playerController;
+
+	private List<Enemy> enemies = new ArrayList<Enemy>();
+	private List<Enemy> removeEnemies = new ArrayList<Enemy>();
 
 	public static BawlzGame getInstance() {
 		if (instance == null) {
@@ -21,10 +27,14 @@ public class BawlzGame extends JFrame implements MouseMotionListener {
 
 		playField = new PlayField(500, 400);
 		this.add(playField);
-		this.addMouseMotionListener(this);
-		//pack();
-		
+
 		player = new Player();
+
+		playerController = new MouseController();
+		playerController.init(this, player);
+		//pack();
+
+		enemies.add(new Enemy(-0.25f, 0.5f, 0.005f, 0f));
 
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		
@@ -36,34 +46,45 @@ public class BawlzGame extends JFrame implements MouseMotionListener {
 		}, 0 /*delay*/, 10 /*period*/);
 	}
 
-	private PlayField playField;
-	private Player player;
+
 
 	public Player getPlayer() {
 		return player;
 	}
+	public List<Enemy> getEnemies() {
+		return enemies;
+	}
+	public PlayField getPlayField() {
+		return playField;
+	}
 
 	private void runFrame() {
 		// Anropa think() på Playern
-		player.think();
+		playerController.runFrame();
+		player.runFrame();
 		// Anropa think() på alla fiender
+		for (Enemy e : enemies) {
+			e.runFrame();
+		}
+
+		synchronized (enemies) {
+			enemies.add(new Enemy(-0.25f, (float) (Math.random()), 0.005f, 0f));
+			enemies.removeAll(removeEnemies);
+		}
+
 		// Anropa think() på alla bullets
 
 		// Säg åt PlayField att rita om		
 		playField.repaint();
 	}
+	
+	public void removeEnemy(Enemy e) {
+		removeEnemies.add(e);
+	}
 
 	public static void main(String[] args) {
 		BawlzGame game = getInstance();
 		game.setVisible(true);
-	}
-
-	@Override
-	public void mouseDragged(MouseEvent e) {
-	}
-	@Override
-	public void mouseMoved(MouseEvent e) {
-		player.setDestination( ((float) e.getX()) / playField.getWidth(), ((float) e.getY()) / playField.getHeight() );
 	}
 
 }

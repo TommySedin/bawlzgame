@@ -2,10 +2,10 @@ package se.jalapeno.sjk16g.bawlz;
 
 import java.awt.Color;
 import java.awt.Graphics;
+
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
-	private float destX, destY;
 	public Player() {
 		super(0.5f, 0.5f);
 	}
@@ -21,25 +21,19 @@ public class Player extends Entity {
 		return img;
 	}
 
-	public void think() {
-		if (x > destX) {
-			veloX -= 0.0025f;
-		} else if (x < destX) {
-			veloX += 0.0025f;
-		}
-		if (y > destY) {
-			veloY -= 0.0025f;
-		} else if (y < destY) {
-			veloY += 0.0025f;
-		}
-		
+	public void runFrame() {
 		x += veloX;
 		y += veloY;
-		veloX *= 0.99f;
-		veloY *= 0.99f;
+		veloX *= 0.95f;
+		veloY *= 0.95f;
 	}
-	public void setDestination(float x, float y) {
-		this.destX = x;
-		this.destY = y;
+	
+	public void accelerateX(float amount) {
+		veloX += amount;
+		if (Math.abs(veloX) > 0.1f) veloX = Math.signum(veloX) * 0.1f;
+	}
+	public void accelerateY(float amount) {
+		veloY += amount;
+		if (Math.abs(veloY) > 0.1f) veloY = Math.signum(veloY) * 0.1f;
 	}
 }
