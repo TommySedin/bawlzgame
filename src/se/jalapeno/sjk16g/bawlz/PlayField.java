@@ -5,12 +5,14 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-public class PlayField extends JPanel {
+public class PlayField extends JPanel implements ScoreUpdateListener {
 	private int width, height;
+	private int score = 0;
 
-	public PlayField(int w, int h) {
+	public PlayField(int w, int h, Player player) {
 		this.width = w;
 		this.height = h;
+		player.addScoreUpdateListener(this);
 	}
 
 	@Override
@@ -29,5 +31,12 @@ public class PlayField extends JPanel {
 		for (Bullet b : BulletPool.getActiveBullets()) {
 			g.drawImage(b.getImage(), (int)(b.getX() * width), (int) (b.getY() * height), null);
 		}
+		
+		g.drawString("Score: " + score, 0, 100);
+	}
+
+	@Override
+	public void scoreUpdated(ScoreUpdateEvent event) {
+		this.score = event.getNewScore();
 	}
 }

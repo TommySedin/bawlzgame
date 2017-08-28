@@ -25,11 +25,10 @@ public class BawlzGame extends JFrame {
 	}
 	private BawlzGame() {
 		setSize(800, 800);
-
-		playField = new PlayField(800, 800);
-		this.add(playField);
-
 		player = new Player();
+
+		playField = new PlayField(800, 800, player);
+		this.add(playField);
 
 		playerController = new MouseController();
 		playerController.init(this, player);
@@ -86,6 +85,7 @@ public class BawlzGame extends JFrame {
 	
 	public void removeEnemy(Enemy e) {
 		removeEnemies.add(e);
+		player.addScore(1);
 	}
 
 	public static void main(String[] args) {
