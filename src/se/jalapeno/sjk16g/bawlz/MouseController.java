@@ -12,7 +12,7 @@ public class MouseController implements PlayerController, MouseMotionListener {
 		this.player = player;
 		destX = player.getX();
 		destY = player.getY();
-		game.addMouseMotionListener(this);
+		game.getPlayField().addMouseMotionListener(this);
 	}
 
 	@Override

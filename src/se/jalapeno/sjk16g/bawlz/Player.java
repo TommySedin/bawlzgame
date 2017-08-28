@@ -6,6 +6,8 @@ import java.awt.Graphics;
 import java.awt.image.BufferedImage;
 
 public class Player extends Entity {
+	private int score = 0;
+
 	public Player() {
 		super(0.5f, 0.5f);
 	}

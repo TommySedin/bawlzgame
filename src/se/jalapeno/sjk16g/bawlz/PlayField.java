@@ -25,5 +25,9 @@ public class PlayField extends JPanel {
 				g.drawImage(e.getImage(), (int)(e.getX() * width), (int) (e.getY() * height), null);
 			}
 		}
+		
+		for (Bullet b : BulletPool.getActiveBullets()) {
+			g.drawImage(b.getImage(), (int)(b.getX() * width), (int) (b.getY() * height), null);
+		}
 	}
 }
